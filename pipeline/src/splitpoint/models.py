@@ -1,13 +1,13 @@
 """The data contract between pipeline stages and the site. The site's types are generated from
 SiteData's JSON Schema, so change a model here and both sides move together."""
 
-import json
 from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from .categories import Category
+from .io import write_json
 
 CategoryId = Literal[
     "wrong_location", "incomplete_fix", "broke_other_behaviour", "misread_issue",
@@ -152,5 +152,4 @@ class SiteData(Model):
 
 
 def write_schema(path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(SiteData.model_json_schema(), indent=2) + "\n", encoding="utf-8")
+    write_json(path, SiteData.model_json_schema(), indent=2)

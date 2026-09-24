@@ -1,12 +1,12 @@
 """Stage 1: download SWE-smith's tool split and choose one passing and one failing run per task."""
 
 import hashlib
-import json
 import random
 from collections import defaultdict
 from itertools import product
 
 from . import SEED
+from .io import write_json, write_text
 from .models import PairMeta
 from .paths import PAIRS, PARQUET_GLOB, RAW, VALIDATION_IDS
 
@@ -76,9 +76,8 @@ def run(args=None) -> None:
     download()
     rows = load_meta()
     pairs = select_pairs(rows)
-    PAIRS.parent.mkdir(parents=True, exist_ok=True)
-    PAIRS.write_text("".join(p.model_dump_json() + "\n" for p in pairs), encoding="utf-8")
+    write_text(PAIRS, "".join(p.model_dump_json() + "\n" for p in pairs))
     ids = pick_validation(pairs)
-    VALIDATION_IDS.write_text(json.dumps(ids, indent=2) + "\n", encoding="utf-8")
+    write_json(VALIDATION_IDS, ids, indent=2)
     n_cross = sum(p.cross_model for p in pairs)
     print(f"{len(rows)} runs -> {len(pairs)} pairs ({n_cross} cross-model), {len(ids)} for validation")
