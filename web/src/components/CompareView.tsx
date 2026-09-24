@@ -8,8 +8,17 @@ import { modelName, taskName } from "@/lib/format";
 import { groupRows } from "@/lib/rows";
 import type { Category, PairDoc, Row } from "@/types/data";
 
-export function CompareView({ doc, categories }: { doc: PairDoc; categories: Category[] }) {
-  const split = doc.verdict?.split_step ?? null;
+export function CompareView({
+  doc,
+  categories,
+  blind = false,
+}: {
+  doc: PairDoc;
+  categories: Category[];
+  /** Label mode: hide the judge's verdict and the alignment's candidates. */
+  blind?: boolean;
+}) {
+  const split = blind ? null : (doc.verdict?.split_step ?? null);
   const candidateSteps = useMemo(() => new Set(doc.candidates.map((c) => c.step)), [doc.candidates]);
   const items = useMemo(() => groupRows(doc.rows, split), [doc.rows, split]);
   const [openStrips, setOpenStrips] = useState<Set<string>>(new Set());
@@ -26,7 +35,7 @@ export function CompareView({ doc, categories }: { doc: PairDoc; categories: Cat
   const failTone = (row: Row, isSplit: boolean): Tone => {
     if (isSplit) return "split";
     if (row.match) return "matched";
-    if (split === null && row.f !== null && candidateSteps.has(row.f)) return "candidate";
+    if (!blind && split === null && row.f !== null && candidateSteps.has(row.f)) return "candidate";
     return "normal";
   };
 
@@ -46,7 +55,7 @@ export function CompareView({ doc, categories }: { doc: PairDoc; categories: Cat
             {doc.repo} · <span className="font-mono text-xs">{doc.instance_id}</span>
           </p>
         </div>
-        {doc.verdict ? (
+        {blind ? null : doc.verdict ? (
           <a href="#split" className="block rounded-lg border border-fail-line bg-fail-bg px-3 py-2 text-sm">
             <span className="font-medium text-fail">
               Split at step {doc.verdict.split_step} of {failSteps}:

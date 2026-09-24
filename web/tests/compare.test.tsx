@@ -40,6 +40,14 @@ describe("CompareView", () => {
     expect(screen.getByText("output of 0")).toBeInTheDocument();
   });
 
+  it("hides the verdict and candidates in blind (label) mode", () => {
+    const { container } = render(<CompareView doc={DOC} categories={CATEGORIES} blind />);
+    expect(screen.queryByTestId("judge-card")).toBeNull();
+    expect(screen.queryByText(/Edited b.py/)).toBeNull();
+    expect(screen.queryByText(/Not judged yet/)).toBeNull();
+    expect(container.querySelector('[data-tone="split"], [data-tone="candidate"]')).toBeNull();
+  });
+
   it("shows alignment candidates when there is no verdict", () => {
     const { container } = render(<CompareView doc={{ ...DOC, verdict: null }} categories={CATEGORIES} />);
     expect(screen.getByText(/Not judged yet/)).toBeInTheDocument();
