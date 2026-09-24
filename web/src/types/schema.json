@@ -4,7 +4,6 @@
       "additionalProperties": false,
       "properties": {
         "step": {
-          "title": "Step",
           "type": "integer"
         },
         "rule": {
@@ -14,7 +13,6 @@
             "unfixed_test_failure",
             "fallback"
           ],
-          "title": "Rule",
           "type": "string"
         }
       },
@@ -28,15 +26,12 @@
     "Category": {
       "properties": {
         "id": {
-          "title": "Id",
           "type": "string"
         },
         "label": {
-          "title": "Label",
           "type": "string"
         },
         "definition": {
-          "title": "Definition",
           "type": "string"
         }
       },
@@ -52,18 +47,15 @@
       "additionalProperties": false,
       "properties": {
         "n_pairs": {
-          "title": "N Pairs",
           "type": "integer"
         },
         "n_judged": {
-          "title": "N Judged",
           "type": "integer"
         },
         "categories": {
           "additionalProperties": {
             "type": "integer"
           },
-          "title": "Categories",
           "type": "object"
         },
         "by_model": {
@@ -73,14 +65,12 @@
             },
             "type": "object"
           },
-          "title": "By Model",
           "type": "object"
         },
         "split_fraction_hist": {
           "items": {
             "type": "integer"
           },
-          "title": "Split Fraction Hist",
           "type": "array"
         },
         "median_split_fraction": {
@@ -91,8 +81,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Median Split Fraction"
+          ]
         },
         "validation": {
           "anyOf": [
@@ -105,15 +94,12 @@
           ]
         },
         "judge_input_tokens": {
-          "title": "Judge Input Tokens",
           "type": "integer"
         },
         "judge_output_tokens": {
-          "title": "Judge Output Tokens",
           "type": "integer"
         },
         "judge_cost_usd": {
-          "title": "Judge Cost Usd",
           "type": "number"
         }
       },
@@ -136,23 +122,18 @@
       "additionalProperties": false,
       "properties": {
         "pair_id": {
-          "title": "Pair Id",
           "type": "string"
         },
         "instance_id": {
-          "title": "Instance Id",
           "type": "string"
         },
         "repo": {
-          "title": "Repo",
           "type": "string"
         },
         "pass_model": {
-          "title": "Pass Model",
           "type": "string"
         },
         "fail_model": {
-          "title": "Fail Model",
           "type": "string"
         },
         "category": {
@@ -173,8 +154,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Category"
+          ]
         },
         "split_step": {
           "anyOf": [
@@ -184,15 +164,12 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Split Step"
+          ]
         },
         "fail_steps": {
-          "title": "Fail Steps",
           "type": "integer"
         },
         "validation": {
-          "title": "Validation",
           "type": "boolean"
         }
       },
@@ -214,19 +191,15 @@
       "additionalProperties": false,
       "properties": {
         "pair_id": {
-          "title": "Pair Id",
           "type": "string"
         },
         "instance_id": {
-          "title": "Instance Id",
           "type": "string"
         },
         "repo": {
-          "title": "Repo",
           "type": "string"
         },
         "issue": {
-          "title": "Issue",
           "type": "string"
         },
         "pass_run": {
@@ -239,14 +212,12 @@
           "items": {
             "$ref": "#/$defs/Row"
           },
-          "title": "Rows",
           "type": "array"
         },
         "candidates": {
           "items": {
             "$ref": "#/$defs/Candidate"
           },
-          "title": "Candidates",
           "type": "array"
         },
         "verdict": {
@@ -260,7 +231,6 @@
           ]
         },
         "validation": {
-          "title": "Validation",
           "type": "boolean"
         }
       },
@@ -290,8 +260,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "P"
+          ]
         },
         "f": {
           "anyOf": [
@@ -301,11 +270,9 @@
             {
               "type": "null"
             }
-          ],
-          "title": "F"
+          ]
         },
         "match": {
-          "title": "Match",
           "type": "boolean"
         }
       },
@@ -321,30 +288,24 @@
       "additionalProperties": false,
       "properties": {
         "traj_id": {
-          "title": "Traj Id",
           "type": "string"
         },
         "model": {
-          "title": "Model",
           "type": "string"
         },
         "resolved": {
-          "title": "Resolved",
           "type": "boolean"
         },
         "issue": {
-          "title": "Issue",
           "type": "string"
         },
         "steps": {
           "items": {
             "$ref": "#/$defs/Step"
           },
-          "title": "Steps",
           "type": "array"
         },
         "patch": {
-          "title": "Patch",
           "type": "string"
         }
       },
@@ -363,19 +324,15 @@
       "additionalProperties": false,
       "properties": {
         "index": {
-          "title": "Index",
           "type": "integer"
         },
         "thought": {
-          "title": "Thought",
           "type": "string"
         },
         "tool": {
-          "title": "Tool",
           "type": "string"
         },
         "command": {
-          "title": "Command",
           "type": "string"
         },
         "action": {
@@ -389,22 +346,18 @@
             "submit",
             "other"
           ],
-          "title": "Action",
           "type": "string"
         },
         "files": {
           "items": {
             "type": "string"
           },
-          "title": "Files",
           "type": "array"
         },
         "output": {
-          "title": "Output",
           "type": "string"
         },
         "truncated": {
-          "title": "Truncated",
           "type": "boolean"
         },
         "test_result": {
@@ -436,15 +389,12 @@
       "additionalProperties": false,
       "properties": {
         "passed": {
-          "title": "Passed",
           "type": "integer"
         },
         "failed": {
-          "title": "Failed",
           "type": "integer"
         },
         "errors": {
-          "title": "Errors",
           "type": "integer"
         }
       },
@@ -460,7 +410,6 @@
       "additionalProperties": false,
       "properties": {
         "n": {
-          "title": "N",
           "type": "integer"
         },
         "category_kappa": {
@@ -471,8 +420,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Category Kappa"
+          ]
         },
         "category_agreement": {
           "anyOf": [
@@ -482,8 +430,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Category Agreement"
+          ]
         },
         "split_exact": {
           "anyOf": [
@@ -493,8 +440,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Split Exact"
+          ]
         },
         "split_within_2": {
           "anyOf": [
@@ -504,8 +450,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Split Within 2"
+          ]
         },
         "baseline_split_exact": {
           "anyOf": [
@@ -515,8 +460,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Baseline Split Exact"
+          ]
         },
         "baseline_split_within_2": {
           "anyOf": [
@@ -526,8 +470,7 @@
             {
               "type": "null"
             }
-          ],
-          "title": "Baseline Split Within 2"
+          ]
         }
       },
       "required": [
@@ -547,12 +490,10 @@
       "properties": {
         "split_step": {
           "minimum": 0,
-          "title": "Split Step",
           "type": "integer"
         },
         "reason": {
           "minLength": 1,
-          "title": "Reason",
           "type": "string"
         },
         "category": {
@@ -566,13 +507,11 @@
             "tool_or_syntax_trouble",
             "other"
           ],
-          "title": "Category",
           "type": "string"
         },
         "confidence": {
           "maximum": 1,
           "minimum": 0,
-          "title": "Confidence",
           "type": "number"
         }
       },
@@ -593,7 +532,6 @@
       "items": {
         "$ref": "#/$defs/IndexEntry"
       },
-      "title": "Index",
       "type": "array"
     },
     "pair": {
@@ -606,7 +544,6 @@
       "items": {
         "$ref": "#/$defs/Category"
       },
-      "title": "Category Defs",
       "type": "array"
     }
   },

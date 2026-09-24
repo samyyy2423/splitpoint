@@ -152,5 +152,14 @@ class SiteData(Model):
     category_defs: list[Category]
 
 
+def site_schema() -> dict:
+    """SiteData's JSON Schema without per-field titles, so generated TypeScript keeps only model names."""
+    schema = SiteData.model_json_schema()
+    for model in [schema, *schema.get("$defs", {}).values()]:
+        for prop in model.get("properties", {}).values():
+            prop.pop("title", None)
+    return schema
+
+
 def write_schema(path: Path) -> None:
-    write_json(path, SiteData.model_json_schema(), indent=2)
+    write_json(path, site_schema(), indent=2)
