@@ -1,0 +1,26 @@
+[project]
+name = "splitpoint"
+version = "0.1.0"
+description = "Pipeline for Splitpoint: aligned pass/fail agent runs with an LLM judge"
+authors = [
+    { name = "Samyak Pudke", email = "workitsam01@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=1.8.0",
+    "duckdb>=1.5.5",
+    "huggingface-hub>=1.33.0",
+    "pyarrow>=25.0.1",
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.3",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.1,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "jsonschema>=4.26.0",
+    "pytest>=9.1.1",
+]
