@@ -26,8 +26,9 @@ def main(argv: list[str] | None = None) -> int:
         write_schema(SCHEMA)
         print(f"wrote {SCHEMA}")
         return 0
-    print(f"{args.stage}: not implemented yet", file=sys.stderr)
-    return 1
+    import importlib
+    module = importlib.import_module(f"splitpoint.{args.stage}")
+    return module.run(args) or 0
 
 
 if __name__ == "__main__":
