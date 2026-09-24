@@ -1,0 +1,621 @@
+{
+  "$defs": {
+    "Candidate": {
+      "additionalProperties": false,
+      "properties": {
+        "step": {
+          "title": "Step",
+          "type": "integer"
+        },
+        "rule": {
+          "enum": [
+            "foreign_edit",
+            "lost_thread",
+            "unfixed_test_failure",
+            "fallback"
+          ],
+          "title": "Rule",
+          "type": "string"
+        }
+      },
+      "required": [
+        "step",
+        "rule"
+      ],
+      "title": "Candidate",
+      "type": "object"
+    },
+    "Category": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "definition": {
+          "title": "Definition",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "definition"
+      ],
+      "title": "Category",
+      "type": "object"
+    },
+    "Findings": {
+      "additionalProperties": false,
+      "properties": {
+        "n_pairs": {
+          "title": "N Pairs",
+          "type": "integer"
+        },
+        "n_judged": {
+          "title": "N Judged",
+          "type": "integer"
+        },
+        "categories": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Categories",
+          "type": "object"
+        },
+        "by_model": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object"
+          },
+          "title": "By Model",
+          "type": "object"
+        },
+        "split_fraction_hist": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Split Fraction Hist",
+          "type": "array"
+        },
+        "median_split_fraction": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Median Split Fraction"
+        },
+        "validation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Validation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "judge_input_tokens": {
+          "title": "Judge Input Tokens",
+          "type": "integer"
+        },
+        "judge_output_tokens": {
+          "title": "Judge Output Tokens",
+          "type": "integer"
+        },
+        "judge_cost_usd": {
+          "title": "Judge Cost Usd",
+          "type": "number"
+        }
+      },
+      "required": [
+        "n_pairs",
+        "n_judged",
+        "categories",
+        "by_model",
+        "split_fraction_hist",
+        "median_split_fraction",
+        "validation",
+        "judge_input_tokens",
+        "judge_output_tokens",
+        "judge_cost_usd"
+      ],
+      "title": "Findings",
+      "type": "object"
+    },
+    "IndexEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "pair_id": {
+          "title": "Pair Id",
+          "type": "string"
+        },
+        "instance_id": {
+          "title": "Instance Id",
+          "type": "string"
+        },
+        "repo": {
+          "title": "Repo",
+          "type": "string"
+        },
+        "pass_model": {
+          "title": "Pass Model",
+          "type": "string"
+        },
+        "fail_model": {
+          "title": "Fail Model",
+          "type": "string"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "enum": [
+                "wrong_location",
+                "incomplete_fix",
+                "broke_other_behaviour",
+                "misread_issue",
+                "never_verified",
+                "gave_up_or_ran_out",
+                "tool_or_syntax_trouble",
+                "other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Category"
+        },
+        "split_step": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Split Step"
+        },
+        "fail_steps": {
+          "title": "Fail Steps",
+          "type": "integer"
+        },
+        "validation": {
+          "title": "Validation",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pair_id",
+        "instance_id",
+        "repo",
+        "pass_model",
+        "fail_model",
+        "category",
+        "split_step",
+        "fail_steps",
+        "validation"
+      ],
+      "title": "IndexEntry",
+      "type": "object"
+    },
+    "PairDoc": {
+      "additionalProperties": false,
+      "properties": {
+        "pair_id": {
+          "title": "Pair Id",
+          "type": "string"
+        },
+        "instance_id": {
+          "title": "Instance Id",
+          "type": "string"
+        },
+        "repo": {
+          "title": "Repo",
+          "type": "string"
+        },
+        "issue": {
+          "title": "Issue",
+          "type": "string"
+        },
+        "pass_run": {
+          "$ref": "#/$defs/Run"
+        },
+        "fail_run": {
+          "$ref": "#/$defs/Run"
+        },
+        "rows": {
+          "items": {
+            "$ref": "#/$defs/Row"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/Candidate"
+          },
+          "title": "Candidates",
+          "type": "array"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Verdict"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "validation": {
+          "title": "Validation",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "pair_id",
+        "instance_id",
+        "repo",
+        "issue",
+        "pass_run",
+        "fail_run",
+        "rows",
+        "candidates",
+        "verdict",
+        "validation"
+      ],
+      "title": "PairDoc",
+      "type": "object"
+    },
+    "Row": {
+      "additionalProperties": false,
+      "properties": {
+        "p": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "P"
+        },
+        "f": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "F"
+        },
+        "match": {
+          "title": "Match",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "p",
+        "f",
+        "match"
+      ],
+      "title": "Row",
+      "type": "object"
+    },
+    "Run": {
+      "additionalProperties": false,
+      "properties": {
+        "traj_id": {
+          "title": "Traj Id",
+          "type": "string"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "resolved": {
+          "title": "Resolved",
+          "type": "boolean"
+        },
+        "issue": {
+          "title": "Issue",
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/$defs/Step"
+          },
+          "title": "Steps",
+          "type": "array"
+        },
+        "patch": {
+          "title": "Patch",
+          "type": "string"
+        }
+      },
+      "required": [
+        "traj_id",
+        "model",
+        "resolved",
+        "issue",
+        "steps",
+        "patch"
+      ],
+      "title": "Run",
+      "type": "object"
+    },
+    "Step": {
+      "additionalProperties": false,
+      "properties": {
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "thought": {
+          "title": "Thought",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        },
+        "command": {
+          "title": "Command",
+          "type": "string"
+        },
+        "action": {
+          "enum": [
+            "view",
+            "create",
+            "edit",
+            "search",
+            "test",
+            "run",
+            "submit",
+            "other"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "files": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "output": {
+          "title": "Output",
+          "type": "string"
+        },
+        "truncated": {
+          "title": "Truncated",
+          "type": "boolean"
+        },
+        "test_result": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TestResult"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "index",
+        "thought",
+        "tool",
+        "command",
+        "action",
+        "files",
+        "output",
+        "truncated",
+        "test_result"
+      ],
+      "title": "Step",
+      "type": "object"
+    },
+    "TestResult": {
+      "additionalProperties": false,
+      "properties": {
+        "passed": {
+          "title": "Passed",
+          "type": "integer"
+        },
+        "failed": {
+          "title": "Failed",
+          "type": "integer"
+        },
+        "errors": {
+          "title": "Errors",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "passed",
+        "failed",
+        "errors"
+      ],
+      "title": "TestResult",
+      "type": "object"
+    },
+    "Validation": {
+      "additionalProperties": false,
+      "properties": {
+        "n": {
+          "title": "N",
+          "type": "integer"
+        },
+        "category_kappa": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Category Kappa"
+        },
+        "category_agreement": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Category Agreement"
+        },
+        "split_exact": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Split Exact"
+        },
+        "split_within_2": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Split Within 2"
+        },
+        "baseline_split_exact": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Baseline Split Exact"
+        },
+        "baseline_split_within_2": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Baseline Split Within 2"
+        }
+      },
+      "required": [
+        "n",
+        "category_kappa",
+        "category_agreement",
+        "split_exact",
+        "split_within_2",
+        "baseline_split_exact",
+        "baseline_split_within_2"
+      ],
+      "title": "Validation",
+      "type": "object"
+    },
+    "Verdict": {
+      "additionalProperties": false,
+      "properties": {
+        "split_step": {
+          "minimum": 0,
+          "title": "Split Step",
+          "type": "integer"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "wrong_location",
+            "incomplete_fix",
+            "broke_other_behaviour",
+            "misread_issue",
+            "never_verified",
+            "gave_up_or_ran_out",
+            "tool_or_syntax_trouble",
+            "other"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "split_step",
+        "reason",
+        "category",
+        "confidence"
+      ],
+      "title": "Verdict",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Schema wrapper only: one of each file the site reads.",
+  "properties": {
+    "index": {
+      "items": {
+        "$ref": "#/$defs/IndexEntry"
+      },
+      "title": "Index",
+      "type": "array"
+    },
+    "pair": {
+      "$ref": "#/$defs/PairDoc"
+    },
+    "findings": {
+      "$ref": "#/$defs/Findings"
+    },
+    "category_defs": {
+      "items": {
+        "$ref": "#/$defs/Category"
+      },
+      "title": "Category Defs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "index",
+    "pair",
+    "findings",
+    "category_defs"
+  ],
+  "title": "SiteData",
+  "type": "object"
+}

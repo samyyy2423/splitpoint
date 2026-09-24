@@ -20,6 +20,12 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("schema", help="write the JSON Schema the site's types are generated from")
 
     args = parser.parse_args(argv)
+    if args.stage == "schema":
+        from .models import write_schema
+        from .paths import SCHEMA
+        write_schema(SCHEMA)
+        print(f"wrote {SCHEMA}")
+        return 0
     print(f"{args.stage}: not implemented yet", file=sys.stderr)
     return 1
 
