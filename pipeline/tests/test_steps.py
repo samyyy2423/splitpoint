@@ -3,7 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from splitpoint.steps import classify, issue_of, loads_loose, parse_run, parse_test_summary, render_command, trim
+from splitpoint.steps import (classify, issue_of, loads_loose, parse_run, parse_test_summary, render_command, trim,
+                              trim_patch)
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -48,6 +49,18 @@ def test_trim_keeps_head_and_tail():
     assert cut and out.startswith("a" * 2500) and out.endswith("b" * 1500)
     assert "2000 characters trimmed" in out
     assert trim("short", limit=4000) == ("short", False)
+
+
+def test_trim_patch_caps_each_file_and_the_total():
+    small = "diff --git a/a.py b/a.py\n+x = 1\n"
+    huge = "diff --git a/data.csv b/data.csv\n" + "+row\n" * 10000
+    patch, cut = trim_patch(small + huge + small.replace("a.py", "c.py"), per_file=1000, total=1500)
+    assert cut
+    assert patch.startswith(small)
+    assert "diff --git a/data.csv" in patch and "characters of this file trimmed" in patch
+    assert "diff --git a/c.py" in patch or "more files trimmed" in patch
+    assert len(patch) < 2000
+    assert trim_patch(small) == (small, False)
 
 
 def test_issue_of_extracts_pr_description():

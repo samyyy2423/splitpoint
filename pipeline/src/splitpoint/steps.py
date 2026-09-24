@@ -11,6 +11,8 @@ from .paths import PAIRS, PARQUET_GLOB, RUNS
 
 OUTPUT_LIMIT = 4000
 HEAD, TAIL = 2500, 1500
+COMMAND_LIMIT = 4000
+PATCH_FILE_LIMIT, PATCH_TOTAL_LIMIT = 8000, 20000
 
 TEST_RUNNER = re.compile(r"\b(pytest|py\.test|tox|nox)\b|-m\s+unittest\b")
 SEARCH_CMDS = {"grep", "rg", "find", "ls", "ag"}
@@ -146,6 +148,25 @@ def native_calls(msg: dict) -> list[tuple[str, dict, str | None]]:
     return calls
 
 
+def trim_patch(patch: str, per_file: int = PATCH_FILE_LIMIT, total: int = PATCH_TOTAL_LIMIT) -> tuple[str, bool]:
+    """Keep whole small file diffs; cut huge ones (data files, vendored code) to their start."""
+    if len(patch) <= per_file and len(patch) <= total:
+        return patch, False
+    files = re.split(r"(?=^diff --git )", patch, flags=re.M)
+    out, used, cut = [], 0, False
+    for i, part in enumerate(f for f in files if f):
+        if used >= total:
+            rest = len([f for f in files if f]) - i
+            out.append(f"… [{rest} more files trimmed]\n")
+            return "".join(out), True
+        if len(part) > per_file:
+            part = part[:per_file] + f"\n… [{len(part) - per_file} characters of this file trimmed]\n"
+            cut = True
+        out.append(part)
+        used += len(part)
+    return "".join(out), cut
+
+
 def parse_run(messages, patch: str, traj_id: str, model: str, resolved: bool) -> Run:
     messages = loads_loose(messages)
     issue = ""
@@ -189,7 +210,8 @@ def parse_run(messages, patch: str, traj_id: str, model: str, resolved: bool) ->
                 action, files = classify(tool, args)
                 step = {
                     "index": len(steps), "thought": "\n\n".join([*pending_thought, thought]) if i == 0 else "",
-                    "tool": tool, "command": render_command(tool, args), "action": action, "files": files,
+                    "tool": tool, "command": trim(render_command(tool, args), COMMAND_LIMIT)[0], "action": action,
+                    "files": files,
                     "output": "", "truncated": False, "test_result": None,
                 }
                 pending_thought = []
@@ -209,7 +231,7 @@ def parse_run(messages, patch: str, traj_id: str, model: str, resolved: bool) ->
             attach_output(target, text_of(msg.get("content")))
 
     return Run(traj_id=traj_id, model=model, resolved=resolved, issue=issue,
-               steps=[Step(**s) for s in steps], patch=patch or "")
+               steps=[Step(**s) for s in steps], patch=trim_patch(patch or "")[0])
 
 
 def run(args=None) -> None:

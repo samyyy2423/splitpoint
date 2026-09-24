@@ -9,3 +9,5 @@ __pycache__/
 .pytest_cache/
 test-results/
 playwright-report/
+# exported site data is committed once, after the judge run
+web/public/data/
