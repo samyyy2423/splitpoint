@@ -92,6 +92,7 @@ class JudgeRecord(Model):
     attempts: int
     input_tokens: int
     output_tokens: int
+    cost_usd: float
     errors: list[str]
 
 
