@@ -7,7 +7,7 @@
     "build": "next build",
     "lint": "eslint",
     "test": "vitest run",
-    "e2e": "playwright test",
+    "e2e": "next build && playwright test",
     "gen:types": "json2ts -i src/types/schema.json -o src/types/data.ts --bannerComment \"/* Generated from pipeline/src/splitpoint/models.py via src/types/schema.json. Do not edit; run pnpm gen:types. */\""
   },
   "dependencies": {
